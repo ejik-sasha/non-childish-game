@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from game_service.models.character import Character
+from sqlalchemy.future import select
 async def create_character(payload, db: AsyncSession) -> Character:
     new_character = Character(
         name=payload.name,

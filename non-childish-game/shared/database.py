@@ -11,13 +11,12 @@ class Settings(BaseSettings):
     DB_NAME: str
 
     @property
-    def DATABASE_URL_ASYNC(self):
+    def DATABASE_URL_ASYNC(self) -> str:
         return f"mysql+aiomysql://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
-    model_config = SettingsConfigDict(env_file=".env")
-    
-DATABASE_URL = Settings()
+    model_config = SettingsConfigDict(env_file="/.env")
+settings = Settings()
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(settings.DATABASE_URL_ASYNC, echo=True)
 
 async_session = sessionmaker(
     engine, class_=AsyncSession, expire_on_commit=False
@@ -28,4 +27,4 @@ class Base(DeclarativeBase):
 
 async def get_db():
     async with async_session() as session:
-        yield
+        yield session
