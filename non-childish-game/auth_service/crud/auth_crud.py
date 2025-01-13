@@ -1,13 +1,21 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from auth_service.models.user import User
+from passlib.hash import bcrypt
+from auth_service.schemas.auth_schemas import UserCreate
 
-async def get_user_by_email(email: str, db: AsyncSession) -> User | None:
-    result = await db.execute(select(User).filter(User.email == email))
-    return result.scalars().first()
+async def get_user_by_email(email: str, db: AsyncSession):
+    query = select(User).where(User.email == email)
+    result = await db.execute(query)
+    return result.scalar_one_or_none()
 
-async def create_user(email: str, hashed_password: str, db: AsyncSession) -> User:
-    new_user = User(email=email, hashed_password=hashed_password)
+async def create_user(user_data: UserCreate, db: AsyncSession):
+    password_hash = bcrypt.hash(user_data.password)
+    new_user = User(
+        email=user_data.email,
+        username=user_data.username,
+        password_hash=password_hash
+    )
     db.add(new_user)
     await db.commit()
     await db.refresh(new_user)

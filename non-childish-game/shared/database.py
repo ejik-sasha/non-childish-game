@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     @property
     def DATABASE_URL_ASYNC(self) -> str:
         return f"mysql+aiomysql://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
-    model_config = SettingsConfigDict(env_file="/.env")
+    model_config = SettingsConfigDict(env_file=r'C:\Users\pomaz\Documents\GitHub\non-childish-game-new\non-childish-game\.env')
 settings = Settings()
 
 engine = create_async_engine(settings.DATABASE_URL_ASYNC, echo=True)

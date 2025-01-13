@@ -1,12 +1,14 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
-class RegisterSchema(BaseModel):
+class UserCreate(BaseModel):
     email: EmailStr
-    password: str
+    username: str = Field(..., max_length=50)
+    password: str = Field(..., min_length=6)
 
-class UserSchema(BaseModel):
+class UserResponse(BaseModel):
     id: int
     email: EmailStr
+    username: str
 
     class Config:
         orm_mode = True
