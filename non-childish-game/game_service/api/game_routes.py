@@ -8,9 +8,9 @@ class CreateCharacterRequest(BaseModel):
     user_id: int
     name: str
 
-router = APIRouter()
+game_router = APIRouter()
 
-@router.post("/create-character")
+@game_router.post("/create-character")
 async def create_character_for_user(character: CreateCharacterRequest, db: AsyncSession = Depends(get_db)):
     new_character = await create_character(character.user_id, character.name, db)
     return {"id": new_character.id, "name": new_character.name}
