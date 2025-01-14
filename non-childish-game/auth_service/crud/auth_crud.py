@@ -20,3 +20,19 @@ async def create_user(user_data: UserCreate, db: AsyncSession):
     await db.commit()
     await db.refresh(new_user)
     return new_user
+
+async def get_user(db: AsyncSession, user_id: int):
+    return db.query(User).filter(User.id == user_id).first()
+
+
+async def get_all_users(db: AsyncSession):
+    return db.query(User).all()
+
+
+async def delete_user(db: AsyncSession, user_id: int):
+    user = db.query(User).filter(User.id == user_id).first()
+    if user:
+        db.delete(user)
+        db.commit()
+        return True
+    return False

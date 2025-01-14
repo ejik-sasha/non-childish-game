@@ -13,6 +13,8 @@ class Character(Base):
     inlligence = Column(Integer, default=0)
     agility = Column(Integer, default=0)
     gathering = Column(Integer, default=0)
-    is_active = Column(Boolean, default=True)
+    health = Column(Integer, default=100)
 
     user = relationship("User", back_populates="characters")
+
+    resources = relationship("Resource", back_populates="character")
